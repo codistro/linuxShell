@@ -20,7 +20,7 @@ char **parse(char *line){
 				exit(1);
 			}
 		}
-		command = strtok(line,DELIM);
+		command = strtok(NULL,DELIM);
 	}
 	commands[position] = NULL;
 	return commands;
