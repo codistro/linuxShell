@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
+#include "parse.h"
 #define SIZE 1
 char *readCommand(){
 	int bufferSize = SIZE;
@@ -28,6 +30,6 @@ char *readCommand(){
 }
 int main(int argc,char *argv[]){
 	char *arr = readCommand();
-	printf("%s",arr);
+	parse(arr);
 	return 0;
 }
