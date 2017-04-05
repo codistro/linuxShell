@@ -22,7 +22,7 @@ char *readCommand(){
 			return p;
 		}
 		if(position >= SIZE){
-			bufferSize = bufferSize * 2;
+			bufferSize += SIZE;
 			p = (char*)realloc(p,bufferSize);
 			if(!p){
 				printf("ERROR_ALLOCATING_SPACE\n");
@@ -34,8 +34,10 @@ char *readCommand(){
 
 int execute(char** args){
 	if(strcmp("cd",args[0])==0){
-		if(chdir(args[1]) != 0)
-			printf("UNEXPECTED_ERROR_OCCURED\n");
+		if(args[1]==NULL)
+			printf("No path specified\n");
+		else if(chdir(args[1]) != 0)
+			printf("%s: No such file or directory\n",args[1]);
 		return 1;
 	}
 	else if(strcmp("exit",args[0])==0){
@@ -59,7 +61,7 @@ int main(int argc,char *argv[]){
 	char cwd[CURRENT];
 	system("clear");
 	do{
-		if(getcwd(cwd,1000)!=NULL)
+		if(getcwd(cwd,CURRENT)!=NULL)
     		printf("%s$ ",cwd);
     	else
     		printf("ERROR_GETTING_CURRENT_DIRECTORY\n");

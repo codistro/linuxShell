@@ -13,7 +13,7 @@ char **parse(char *line){
 	while(command!=NULL){
 		commands[position++] = command;
 		if(position>=bufferSize){
-			bufferSize = bufferSize * 2;
+			bufferSize += SIZE;
 			commands = (char**)realloc(commands,bufferSize);
 			if(!commands){
 				printf("ERROR_ALLOCATING_SPACE\n");
