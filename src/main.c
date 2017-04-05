@@ -34,7 +34,6 @@ char *readCommand(){
 
 int execute(char** args){
 	if(strcmp("cd",args[0])==0){
-		printf("hello\n");
 		if(chdir(args[1]) != 0)
 			printf("UNEXPECTED_ERROR_OCCURED\n");
 		return 1;
