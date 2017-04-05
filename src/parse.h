@@ -1,8 +1,8 @@
 #define DELIM " \t\n\r\a"
-#define SIZE 1
+#define SIZE 10
 char **parse(char *line){
 	int bufferSize = SIZE;
-	char **commands = malloc(sizeof(char*) * bufferSize);
+	char **commands = (char**)malloc(sizeof(char*) * bufferSize);
 	char *command;
 	int position = 0;
 	if(!commands){
@@ -14,7 +14,7 @@ char **parse(char *line){
 		commands[position++] = command;
 		if(position>=bufferSize){
 			bufferSize = bufferSize * 2;
-			commands = realloc(commands,bufferSize);
+			commands = (char**)realloc(commands,bufferSize);
 			if(!commands){
 				printf("ERROR_ALLOCATING_SPACE\n");
 				exit(1);

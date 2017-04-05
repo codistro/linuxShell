@@ -4,10 +4,10 @@
 #include<unistd.h>
 #include<sys/wait.h>
 #include "parse.h"
-#define SIZE 1
+#define SIZE 10
 char *readCommand(){
 	int bufferSize = SIZE;
-	char *p = malloc(sizeof(char) * bufferSize);
+	char *p = (char*)malloc(sizeof(char) * bufferSize);
 	int position = 0;
 	if(!p){
 		printf("ERROR_ALLOCATING_SPACE\n");
@@ -22,7 +22,7 @@ char *readCommand(){
 		}
 		if(position >= SIZE){
 			bufferSize = bufferSize * 2;
-			p = realloc(p,bufferSize);
+			p = (char*)realloc(p,bufferSize);
 			if(!p){
 				printf("ERROR_ALLOCATING_SPACE\n");
 				exit(1);
@@ -30,22 +30,33 @@ char *readCommand(){
 		}		
 	}while(1);
 }
-int main(int argc,char *argv[]){
-	system("clear");
-	while(1){
-		printf("linuxShell($) ");
-		char *line = readCommand();
-		char **args = parse(line);
-		int pid = fork();
-		if(pid == 0){
-			execvp(args[0],args);
-		}
-		if(pid < 0){
-			printf("error\n");
-		}
-		if(pid > 0){
-			wait(NULL);
-		}
+
+int execute(char** args){
+	int pid = fork();
+	if(pid == 0){
+		execvp(args[0],args);
 	}
+	else if(pid < 0)
+		printf("UNEXPECTED_ERROR_OCCURED\n");
+	else
+		wait(NULL);
+	return 1;
+}
+
+int main(int argc,char *argv[]){
+	char *command;
+	char **arguments;
+	int result;
+	system("clear");
+	do{
+		printf("$ ");
+		command = readCommand();
+		arguments = parse(command);
+		result = execute(arguments);
+
+		free(command);
+		free(arguments);
+	}while(result);
+
 	return 0;
 }
