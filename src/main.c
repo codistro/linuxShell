@@ -33,6 +33,15 @@ char *readCommand(){
 }
 
 int execute(char** args){
+	if(strcmp("cd",args[0])==0){
+		printf("hello\n");
+		if(chdir(args[1]) != 0)
+			printf("UNEXPECTED_ERROR_OCCURED\n");
+		return 1;
+	}
+	else if(strcmp("exit",args[0])==0){
+		return 0;
+	}
 	int pid = fork();
 	if(pid == 0){
 		execvp(args[0],args);
