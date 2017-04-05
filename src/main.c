@@ -5,6 +5,7 @@
 #include<sys/wait.h>
 #include "parse.h"
 #define SIZE 10
+#define CURRENT 1000
 char *readCommand(){
 	int bufferSize = SIZE;
 	char *p = (char*)malloc(sizeof(char) * bufferSize);
@@ -47,9 +48,13 @@ int main(int argc,char *argv[]){
 	char *command;
 	char **arguments;
 	int result;
+	char cwd[CURRENT];
 	system("clear");
 	do{
-		printf("$ ");
+		if(getcwd(cwd,1000)!=NULL)
+    		printf("%s$ ",cwd);
+    	else
+    		printf("ERROR_GETTING_CURRENT_DIRECTORY\n");
 		command = readCommand();
 		arguments = parse(command);
 		result = execute(arguments);
