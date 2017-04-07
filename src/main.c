@@ -43,21 +43,30 @@ int execute(char** args){
 	else if(strcmp("exit",args[0])==0){
 		return 0;
 	}
-	int pid = fork();
-	if(pid == 0){
-		execvp(args[0],args);
+	else{
+		int pid = fork();
+		if(pid == 0){
+			execvp(args[0],args);
+		}
+		else if(pid < 0)
+			printf("UNEXPECTED_ERROR_OCCURED\n");
+		else
+			wait(NULL);
 	}
-	else if(pid < 0)
-		printf("UNEXPECTED_ERROR_OCCURED\n");
-	else
-		wait(NULL);
 	return 1;
+}
+
+void commandHistory(char **history,int n){
+	for(int i = 0;i < n;i++)
+		printf("%s\n",history[i]);
 }
 
 int main(int argc,char *argv[]){
 	char *command;
 	char **arguments;
-	int result;
+	int result = 1;
+	char *history[10];
+	int h = 0;
 	char cwd[CURRENT];
 	system("clear");
 	do{
@@ -66,10 +75,15 @@ int main(int argc,char *argv[]){
     	else
     		printf("ERROR_GETTING_CURRENT_DIRECTORY\n");
 		command = readCommand();
+		history[h] = command;
+		h = (h + 1)%10;
 		arguments = parse(command);
-		result = execute(arguments);
+		if(strcmp("history",arguments[0])==0){
+			commandHistory(history,h);
+		}
+		else
+			result = execute(arguments);
 
-		free(command);
 		free(arguments);
 	}while(result);
 
